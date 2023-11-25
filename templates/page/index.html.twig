@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% endblock %}
+{% block websiteName %}{% endblock %}
 
 {% block body %}
 	<section>
@@ -15,6 +15,15 @@
 					</div>
 				</div>
 			</div>
+		</div>
+	</section>
+
+	<section class="container">
+		<h2>Les derniers films ajoutés</h2>
+		<div class="row text-center">
+			{% for movie in movies %}
+				{% include "partials/_movies_block.html.twig" %}
+			{% endfor %}
 		</div>
 	</section>
 

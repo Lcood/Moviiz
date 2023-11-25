@@ -2,27 +2,33 @@
 
 namespace App\Controller;
 
+use App\Repository\MoviesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PageController extends AbstractController
 {
-    #[Route('/', name: 'home')]
-    public function index(): Response
+    #[Route('/', name: 'app_home')]
+    public function index(MoviesRepository $moviesRepository, ParameterBagInterface $parameterBagInterface): Response
     {
-        return $this->render('page/index.html.twig', [
-            'controller_name' => 'PageController',
-        ]);
-    } 
+        $limit = $parameterBagInterface->get('home_movies_limit');
+        $movies = $moviesRepository->findBy([], ['id' => 'DESC'], $limit);
 
-    #[Route('/about', name: 'about')]
-    public function about(): Response
-    {
-        return $this->render('page/about.html.twig', [
-            'controller_name' => 'PageController',
+        $websiteName = 'Moviiz';
+        return $this->render('page/index.html.twig', [
+            'websiteName' => $websiteName,
+            'movies' => $movies,
         ]);
     }
 
+    #[Route('/about', name: 'app_about')]
+    public function about(): Response
+    {
 
+        return $this->render('page/about.html.twig', [
+            
+        ]);
+    }
 }
