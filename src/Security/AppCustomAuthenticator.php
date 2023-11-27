@@ -44,8 +44,15 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+        # session admin
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
+        # redirection vers la page où l'on était lors de la connexion
+        } else if($targetPath = $request->getSession()->get('previous_url')) {
+
+        # redirection vers la page d'accueil
+        } else {
+            return new RedirectResponse('/');
         }
 
         // For example:

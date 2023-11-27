@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Review;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use phpDocumentor\Reflection\Types\Null_;
 
 /**
  * @extends ServiceEntityRepository<Review>
@@ -36,13 +37,14 @@ class ReviewRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Review
-//    {
-//        return $this->createQueryBuilder('r')
-//            ->andWhere('r.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+public function getAverageRateByMiveId($movieId): float|null
+   {
+       return $this->createQueryBuilder('r')
+           ->select('AVG(r.rate) as averageRate')
+           ->Where('r.movie = :movieId')
+           ->setParameter('movideId', $movieId)
+           ->getQuery()
+            ->getSingleScalarResult()
+        ;
+   }
 }

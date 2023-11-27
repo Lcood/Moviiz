@@ -6,6 +6,59 @@
 {% block body %}
 
 	<section class="container col-xxl-8 px-4 py-5">
+		<h1>{{ movie.name }}</h1>
+		<div class="row">
+			<div class="col">
+				Date de sortie :
+				{% if movie.releasedYear %}
+					{{ movie.releasedYear.format("d/m/y") }}
+				{% else %}
+					N/C
+				{% endif %}
+			</div>
+			<div class="col">
+				Date de sortie :
+				{% if movie.duration %}
+					{{ movie.duration.format("H") }}h{{ movie.duration.format("i") }}
+
+				{% else %}
+					N/C
+				{% endif %}
+			</div>
+			<div class="col">
+				{% for genre in movie.genres  %}
+					<a href="{{ path('app_movies', {'genre.Id': genre.id}) }}">{{ genre.movie}}</a>
+
+				{% endfor %}
+			</div>
+			<div class="col">
+				{% for director in movie.directors  %}
+					<a href="{{ path('app_login')}}">{{ director.firstName.movie}}
+						{{ director.lastName.movie}}</a>
+
+				{% endfor %}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				{% if averageRate %}
+					<div class="row align-items-center">
+						<div>Note moyenne:</div>
+						<div class="rate col-6">
+							{% for i in range(5, 1, -1) %}
+								<input disabled="disabled" type="radio" id="avgstar{{ i }}" name="avgrate" value="{{ i }}" {{ averageRate == i ? 'checked="checked"' : '' }}/>
+								<label for="avgstar{{ i }}" title="{{ i }} étoiles">{{ i }}
+									étoiles</label>
+							{% endfor %}
+
+						</div>
+					</div>
+				{% else %}
+					Il n'y a pas encore de note
+				{% endif %}
+
+			</div>
+		</div>
 		<div class="row flex-lg-row-reverse align-items-center g-5 py-5">
 			<div class="col-10 col-sm-8 col-lg-4">
 				{% if movie.imageName %}
@@ -15,7 +68,6 @@
 				{% endif %}
 			</div>
 			<div class="col-lg-8">
-				<h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">{{ movie.name }}</h1>
 				<p class="lead">{{  movie.synosis|raw }}</p>
 			</div>
 		</div>
@@ -23,7 +75,15 @@
 
 	<section class="container">
 		<div class="row">
-			{% include "partials/review/_form.html.twig" %}
+			<h2>Notre note pour ce film</h2>
+			{% if user %}
+				{% include "partials/review/_form.html.twig" %}
+			{% else %}
+				<p>Vous devez être connecté pour soumettre votre note. Rendez-vous sur la page de connection
+					<a href="{{ path('app_login')}}">Connexion</a>
+				</p>
+			{% endif %}
+
 		</div>
 
 	</section>
